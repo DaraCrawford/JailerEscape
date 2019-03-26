@@ -1,0 +1,195 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Foosteps : MonoBehaviour {
+
+    public bool debugMode;
+
+    [Header("Select Footstep Event")]
+    [FMODUnity.EventRef] public string footstepEvent;   // The audio event.  ALso adds Event selector to inspector.
+
+    FMOD.Studio.EventInstance footstepInstance;         // The event instance (Track states etc.)
+
+
+
+    // Use this for initialization
+    void Start () 
+    {
+        footstepInstance = FMODUnity.RuntimeManager.CreateInstance(footstepEvent);
+        FootstepConcrete();
+	}
+	
+	
+
+    public void FootstepEvent()
+    {
+        if (debugMode) Debug.Log("Footstep Triggered");
+
+        footstepInstance.start();
+        
+    }
+
+
+    // Controls the RTPC volume settings in FMOD.  0 is off, 1 is max volume 
+    #region // Footstep RTPC Trigger Methods
+    public void FootstepConcrete()
+    {
+        if (debugMode) Debug.Log("Footstep Concrete");
+
+        footstepInstance.setParameterValue("Concrete", 1);         
+        footstepInstance.setParameterValue("Mud Shallow", 0);
+        footstepInstance.setParameterValue("Mud Deep", 0);
+        footstepInstance.setParameterValue("Water", 0);
+        footstepInstance.setParameterValue("Water Puddle", 0);
+        footstepInstance.setParameterValue("Grass", 0);
+        footstepInstance.setParameterValue("Metal", 0);
+        footstepInstance.setParameterValue("Wood", 0);
+    }
+
+    public void FootstepWood()
+    {
+        if(debugMode) Debug.Log("Footstep Wood");
+
+        footstepInstance.setParameterValue("Concrete", 0);
+        footstepInstance.setParameterValue("Mud Shallow", 0);
+        footstepInstance.setParameterValue("Mud Deep", 0);
+        footstepInstance.setParameterValue("Water", 0);
+        footstepInstance.setParameterValue("Water Puddle", 0);
+        footstepInstance.setParameterValue("Grass", 0);
+        footstepInstance.setParameterValue("Metal", 0);
+        footstepInstance.setParameterValue("Wood", (float) 0.75);   
+    }
+
+    public void FootstepGrass()
+    {
+        if (debugMode) Debug.Log("Footstep Grass");
+
+        footstepInstance.setParameterValue("Concrete", 0);
+        footstepInstance.setParameterValue("Mud Shallow", 0);
+        footstepInstance.setParameterValue("Mud Deep", 0);
+        footstepInstance.setParameterValue("Water", 0);
+        footstepInstance.setParameterValue("Water Puddle", 0);
+        footstepInstance.setParameterValue("Grass", (float) 0.75);  
+        footstepInstance.setParameterValue("Metal", 0);
+        footstepInstance.setParameterValue("Wood", 0);  
+    }
+
+    public void FootstepMudShallow()
+    {
+        if (debugMode) Debug.Log("Footstep Mud Shallow");
+
+        footstepInstance.setParameterValue("Concrete", 0);
+        footstepInstance.setParameterValue("Mud Shallow", 1);
+        footstepInstance.setParameterValue("Mud Deep", 0);
+        footstepInstance.setParameterValue("Water", 0);
+        footstepInstance.setParameterValue("Water Puddle", 0);
+        footstepInstance.setParameterValue("Grass", (float)0); 
+        footstepInstance.setParameterValue("Metal", 0);
+        footstepInstance.setParameterValue("Wood", 0);
+    }
+
+
+    public void FootstepMudDeep()
+    {
+        if (debugMode) Debug.Log("Footstep Mud Deep");
+
+
+        footstepInstance.setParameterValue("Concrete", 0);
+        footstepInstance.setParameterValue("Mud Shallow", 0);
+        footstepInstance.setParameterValue("Mud Deep", 1);
+        footstepInstance.setParameterValue("Water", 0);
+        footstepInstance.setParameterValue("Water Puddle", 0);
+        footstepInstance.setParameterValue("Grass", (float)0); 
+        footstepInstance.setParameterValue("Metal", 0);
+        footstepInstance.setParameterValue("Wood", 0);
+    }
+
+
+    public void FootstepWaterPuddle()
+    {
+        if (debugMode) Debug.Log("Footstep Puddle");
+
+        footstepInstance.setParameterValue("Concrete", 0);
+        footstepInstance.setParameterValue("Mud Shallow", 0);
+        footstepInstance.setParameterValue("Mud Deep", 0);
+        footstepInstance.setParameterValue("Water", 0);
+        footstepInstance.setParameterValue("Water Puddle", 1);
+        footstepInstance.setParameterValue("Grass", (float)0);  
+        footstepInstance.setParameterValue("Metal", 0);
+        footstepInstance.setParameterValue("Wood", 0);
+    }
+
+    public void FootstepWater()
+    {
+        if (debugMode) Debug.Log("Footstep Water");
+
+        footstepInstance.setParameterValue("Concrete", 0);
+        footstepInstance.setParameterValue("Mud Shallow", 0);
+        footstepInstance.setParameterValue("Mud Deep", 0);
+        footstepInstance.setParameterValue("Water", 1);
+        footstepInstance.setParameterValue("Water Puddle", 0);
+        footstepInstance.setParameterValue("Grass", (float)0);  
+        footstepInstance.setParameterValue("Metal", 0);
+        footstepInstance.setParameterValue("Wood", 0);
+    }
+
+    public void FootstepMetal()
+    {
+        Debug.Log("Footstep Metal");
+
+        footstepInstance.setParameterValue("Concrete", 0);
+        footstepInstance.setParameterValue("Mud Shallow", 0);
+        footstepInstance.setParameterValue("Mud Deep", 0);
+        footstepInstance.setParameterValue("Water", 0);
+        footstepInstance.setParameterValue("Water Puddle", 0);
+        footstepInstance.setParameterValue("Grass", (float)0);  
+        footstepInstance.setParameterValue("Metal", 1);
+        footstepInstance.setParameterValue("Wood", 0);
+    }
+
+    #endregion
+
+
+
+    // Compares Collision tag and triggers the correct footstep method.
+    public void OnCollisionEnter(Collision other)
+    {
+        if(other.gameObject.CompareTag("Wood"))
+        {
+            FootstepWood();
+        }
+        if (other.gameObject.CompareTag("Grass"))
+        {
+            FootstepGrass();
+        }
+        if (other.gameObject.CompareTag("Concrete"))
+        {
+            FootstepConcrete();
+        }
+        if (other.gameObject.CompareTag("Mud Shallow"))
+        {
+            FootstepMudShallow();
+        }
+        if (other.gameObject.CompareTag("Mud Deep"))
+        {
+            FootstepMudDeep();
+        }
+        if (other.gameObject.CompareTag("Metal"))
+        {
+            FootstepMetal();
+        }
+        if (other.gameObject.CompareTag("Water Puddle"))
+        {
+            FootstepWaterPuddle();
+        }
+        if (other.gameObject.CompareTag("Water Puddle"))
+        {
+            FootstepWater();
+        }
+
+    } 
+
+
+
+}
