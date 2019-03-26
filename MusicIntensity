@@ -1,0 +1,64 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Music : MonoBehaviour
+{
+
+    // Changes the music intensity.  0 = Ambient. 1 = Full intensity.
+
+
+    // Default value
+    float musicIntensity = 0;
+
+    // Will add FMOD event selector to inspector.
+    [Header("Select Music Event")]
+    [FMODUnity.EventRef] public string gameplayOne;
+
+    //Will reference and track the state of the audio event.
+    FMOD.Studio.EventInstance _gameplayOne;
+
+
+
+
+    // Use this for initialization
+    void Start()
+    {
+        _gameplayOne = FMODUnity.RuntimeManager.CreateInstance(gameplayOne);
+        _gameplayOne.start();
+    }
+
+    public void MusicUnseen()
+    {
+        musicIntensity = 0.1f;
+
+        // Updates the music intensity
+        _gameplayOne.setParameterValue("Intensity", (float)musicIntensity);
+    }
+
+    public void MusicSearching()
+    {
+        musicIntensity = 0.49f;
+
+        // Updates the music intensity
+        _gameplayOne.setParameterValue("Intensity", (float)musicIntensity);
+    }
+
+    public void MusicIntense()
+    {
+        musicIntensity = 0.75f;
+
+        // Updates the music intensity
+        _gameplayOne.setParameterValue("Intensity", (float)musicIntensity);
+    }
+
+    public void MusicFullIntensity()
+    {
+        musicIntensity = 1f;
+
+        // Updates the music intensity
+        _gameplayOne.setParameterValue("Intensity", (float)musicIntensity);
+    }
+
+}
+
